@@ -77,7 +77,7 @@ public class StaticConstructorTransformerTest {
 
     assert __version__() == 0;
     try {
-      Class.forName("at.ssw.hotswap.test.transformer.StaticConstructorTransformerTest$Static_TestClass");
+      Class.forName("com.github.dcevm.test.transformer.StaticConstructorTransformerTest$Static_TestClass");
     } catch (ClassNotFoundException ex) {
       ex.printStackTrace();
     }
