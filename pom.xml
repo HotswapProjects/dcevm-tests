@@ -63,7 +63,8 @@
                 <version>2.21.0</version>
                 <configuration>
                     <!--<jvm></jvm>-->
-                    <argLine>-javaagent:${basedir}/dcevm-tests-agent.jar -XXaltjvm=dcevm -Xlog:redefine+class*=info</argLine>
+                    <argLine>-javaagent:${basedir}/dcevm-tests-agent.jar -Xlog:redefine+class*=info</argLine>
+
                     <excludedGroups>com.github.dcevm.test.category.Full</excludedGroups>
                 </configuration>
             </plugin>
