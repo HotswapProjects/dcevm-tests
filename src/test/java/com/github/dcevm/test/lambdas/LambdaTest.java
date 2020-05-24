@@ -24,18 +24,18 @@
 
 package com.github.dcevm.test.lambdas;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-
 import static com.github.dcevm.test.util.HotSwapTestHelper.__toVersion__;
 import static com.github.dcevm.test.util.HotSwapTestHelper.__version__;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests for lambda expressions.
@@ -142,4 +142,36 @@ public class LambdaTest {
       // Ok!
     }
   }
+
+  @FunctionalInterface
+  interface FuncLambdaC4 {
+    int test();
+  }
+
+  // version 0
+  public static class LambdaC4 {
+    FuncLambdaC4 test = () -> { return 0; };
+  }
+
+  @FunctionalInterface
+  interface FuncLambdaC4___1 {
+    int test();
+  }
+
+  // version 1
+  public static class LambdaC4___1 {
+    FuncLambdaC4___1 test = () -> { return 1; };
+  }
+
+  @Test
+  public void testMethodLambda4() throws Exception {
+    LambdaC4 a = new LambdaC4();
+
+    assertEquals(0, a.test.test());
+
+    __toVersion__(1);
+
+    assertEquals(1, a.test.test());
+  }
+
 }
