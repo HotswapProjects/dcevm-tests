@@ -23,11 +23,11 @@
  */
 package com.github.dcevm;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Type;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.instrument.UnmodifiableClassException;
 import java.net.URL;
 import java.util.HashMap;
@@ -35,6 +35,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
 
 /**
  * @author Thomas Wuerthinger

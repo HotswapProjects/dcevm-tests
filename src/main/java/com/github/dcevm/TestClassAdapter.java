@@ -23,18 +23,24 @@
  */
 package com.github.dcevm;
 
-import org.objectweb.asm.*;
-import org.objectweb.asm.commons.Remapper;
-import org.objectweb.asm.commons.RemappingAnnotationAdapter;
-import org.objectweb.asm.commons.RemappingClassAdapter;
-import org.objectweb.asm.commons.RemappingMethodAdapter;
-
 import java.util.Map;
+
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ByteVector;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.AnnotationRemapper;
+import org.objectweb.asm.commons.ClassRemapper;
+import org.objectweb.asm.commons.MethodRemapper;
+import org.objectweb.asm.commons.Remapper;
 
 /**
  * @author Ivan Dubrov
  */
-public class TestClassAdapter extends RemappingClassAdapter {
+public class TestClassAdapter extends ClassRemapper {
   /**
    * This suffix is automatically removed from the method.
    */
@@ -76,11 +82,8 @@ public class TestClassAdapter extends RemappingClassAdapter {
     return remapper.mapType(className);
   }
 
-  protected MethodVisitor createRemappingMethodAdapter(
-          int access,
-          String newDesc,
-          MethodVisitor mv) {
-    return new RemappingMethodAdapter(access, newDesc, mv, remapper) {
+  protected MethodVisitor createMethodRemapper(final MethodVisitor methodVisitor) {
+    return new MethodRemapper(methodVisitor, remapper) {
       @Override
       public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         if (name.equals("<init>") && isObject && owner.equals("java/lang/Object")) {
@@ -100,7 +103,7 @@ public class TestClassAdapter extends RemappingClassAdapter {
   @Override
   public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
     AnnotationVisitor av = super.visitAnnotation(remapper.mapDesc(desc), visible);
-    return av == null ? null : new RemappingAnnotationAdapter(av, remapper) {
+    return av == null ? null : new AnnotationRemapper(av, remapper) {
       @Override
       public void visitEnum(String name, String enumDesc, String value) {
         if (Type.getType(enumDesc).getClassName().equals(RedefinitionPolicy.class.getName())) {
