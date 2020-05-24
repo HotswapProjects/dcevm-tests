@@ -24,15 +24,16 @@
 
 package com.github.dcevm.test.lambdas;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.concurrent.Callable;
-
 import static com.github.dcevm.test.util.HotSwapTestHelper.__toVersion__;
 import static com.github.dcevm.test.util.HotSwapTestHelper.__version__;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.concurrent.Callable;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests for lambda expressions
@@ -104,4 +105,37 @@ public class MethodReferenceLambdaTest {
     assertEquals(2, (int) lambda.call());
     assertEquals(10, (int) lambda2.call());
   }
+
+  public static class A1 {
+    public Callable<Integer> createLambda() {
+      return this::value;
+    }
+
+    public int value() {
+      return 0;
+    }
+  }
+
+  public static class A1___1 {
+    public Callable<Integer> createLambda() {
+      return null;
+    }
+  }
+
+  @Test
+  public void testDeletedMethod() throws Exception {
+    assert __version__() == 0;
+
+    Callable<Integer> lambda = (new A1()).createLambda();
+    assertEquals(0, (int) lambda.call());
+    __toVersion__(1);
+
+    try {
+      lambda.call();
+      fail("Should get NoSuchMethodError as method implementing lambda should be gone in version 1");
+    } catch (NoSuchMethodError e) {
+      // Ok!
+    }
+  }
+
 }

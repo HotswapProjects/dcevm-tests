@@ -165,6 +165,8 @@ public class LambdaTest {
 
   @Test
   public void testMethodLambda4() throws Exception {
+    assert __version__() == 0;
+
     LambdaC4 a = new LambdaC4();
 
     assertEquals(0, a.test.test());
